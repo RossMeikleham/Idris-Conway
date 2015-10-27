@@ -1,7 +1,7 @@
 module Main
 
-import Conway
-import Graphics
+import Conway.Conway
+import Conway.Graphics
 import Data.Vect
 
 showCW : Conway m n -> String

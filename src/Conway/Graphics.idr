@@ -1,8 +1,8 @@
-module Graphics
+module Conway.Graphics
 
 import Data.Vect
 import Graphics.SDL
-import Conway
+import Conway.Conway
 
 
 -- | Dimensions of SDL surface (x, y)

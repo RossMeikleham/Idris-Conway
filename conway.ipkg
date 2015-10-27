@@ -1,0 +1,8 @@
+package Conway
+
+opts = "-p sdl"
+sourcedir = src
+modules = Main, Conway.Conway, Conway.Graphics
+
+main = Main
+executable = Conway
