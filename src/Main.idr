@@ -1,6 +1,7 @@
 module Main
 
 import Conway
+import Graphics
 import Data.Vect
 
 showCW : Conway m n -> String
@@ -19,19 +20,22 @@ loop cw = do
        loop $ iterateGame cw 
 
 main : IO ()
-main = loop cw
+main = conwayLoop cw
   where
-      row1 : Vect 3 CellState
-      row1 = fromList [Dead, Alive, Dead]
+      row1 : Vect 4 CellState
+      row1 = fromList [Dead, Alive, Dead, Dead]
 
-      row2 : Vect 3 CellState
-      row2 = fromList [Dead, Alive, Dead]
+      row2 : Vect 4 CellState
+      row2 = fromList [Dead, Alive, Dead, Dead]
       
-      row3 : Vect 3 CellState
-      row3 = fromList [Dead, Alive, Dead]
+      row3 : Vect 4 CellState
+      row3 = fromList [Dead, Alive, Dead, Dead]
 
-      v : Vect 3 (Vect 3 CellState) 
-      v = fromList [row1, row2, row3]
+      row4 : Vect 4 CellState
+      row4 = fromList [Dead, Dead, Dead, Dead]
 
-      cw : Conway 3 3 
+      v : Vect 4 (Vect 4 CellState) 
+      v = fromList [row1, row2, row3, row4]
+
+      cw : Conway 4 4 
       cw = MkConway v

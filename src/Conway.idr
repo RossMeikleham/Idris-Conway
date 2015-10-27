@@ -29,8 +29,8 @@ numAlive {n} nbs = case natToFin (numAlive' nbs) (n + 1) of
             accFn cnt Dead =  (cnt + 0) 
 
 
--- | Count number of dead neighbours, guaranteed to be <= total
---   number of neighbours
+-- | Count the number of dead neighbours, guaranteed to be <= total
+--   number of given neighbours
 numDead : Neighbours n -> Fin (n + 1)
 -- Dead  = Total - Alive
 numDead {n} nb = case natToFin (n - (finToNat $ numAlive nb)) (n + 1) of 
