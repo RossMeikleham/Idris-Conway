@@ -20,6 +20,10 @@ install:
          
     - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install idris; fi
+    
+    - git clone https://github.com/edwinb/SDL-idris
+    - cd SDL-idris
+    - idris --install sdl.ipkg
       
 script:
     - idris --build conway.ipkg
