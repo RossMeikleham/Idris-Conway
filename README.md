@@ -1,5 +1,5 @@
 # Conway's Game Of Life 
-
+[![Build Status](https://travis-ci.org/RossMeikleham/Idris-Conway.svg?branch=master)](https://travis-ci.org/RossMeikleham/Idris-Conway)
 ##Implementation of [Conway's Game Of Life]( https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in Idris
 ![pulsar](/images/Pulsar.gif?raw=true) 
 
