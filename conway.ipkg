@@ -1,6 +1,6 @@
 package Conway
 
-opts = "-p sdl"
+opts = "-p effects -p sdl"
 sourcedir = src
 modules = Main, Conway.Conway, Conway.Graphics
 

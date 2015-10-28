@@ -1,0 +1,13 @@
+#Period 5 Oscillator 
+#Encoded to RLE by Ross Meikleham
+x = 10, y = 10
+10b$
+4b2o4b$
+3bo2bo3b$
+2bo4bo2b$
+1bo6bo1b$
+1bo6bo1b$
+2bo4bo2b$
+3bo2bo3b$
+4b2o4b$
+10b$

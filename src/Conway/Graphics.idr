@@ -5,10 +5,6 @@ import Graphics.SDL
 import Conway.Conway
 
 
--- | Dimensions of SDL surface (x, y)
-screenDims : (Int, Int)
-screenDims = (640, 480)
-
 -- | Performs a sequence of IO actions
 sequenceIO : List (IO ()) -> IO ()
 sequenceIO Nil = return ()
@@ -21,18 +17,18 @@ finToInt : Fin m -> Int
 finToInt = toIntNat . finToNat
 
 -- | Display the current conway state on the given SDL surface
-displayConway : Conway m n -> SDLSurface -> IO ()
-displayConway {m} {n} (MkConway v) s = 
+displayConway : Int -> Int -> Conway m n -> SDLSurface -> IO ()
+displayConway {m} {n} screenX screenY (MkConway v) s = 
   do 
      sequenceIO $ toList $ map displayRow (sequenceFin m) 
      flipBuffers s
 
     where 
         iterY : Int
-        iterY = (snd screenDims) `div` (toIntNat m)
+        iterY = screenY `div` (toIntNat m)
 
         iterX : Int
-        iterX = (fst screenDims) `div` (toIntNat n)
+        iterX = screenX `div` (toIntNat n)
 
         drawCell : Int -> Int -> (Int, Int, Int) -> IO ()
         drawCell py px (r,g,b) = filledRect s (iterX * px) (iterY * py) iterX iterY r g b 128
@@ -49,17 +45,25 @@ displayConway {m} {n} (MkConway v) s =
 -- | Given an initial Conway State, constantly updates 
 --   and displays the Conway State
 conwayLoop : Conway m n -> IO ()
-conwayLoop cw = 
+conwayLoop cw {m} {n} = 
   do 
-    surface <- startSDL (fst screenDims) (snd screenDims)
+    surface <- startSDL screenX screenY
     conwayLoop' cw surface
 
-  where conwayLoop' : Conway m n -> SDLSurface -> IO ()
+  where 
+        screenX : Int 
+        screenX = cast $ n * 16
+       
+        screenY : Int
+        screenY = cast $ m * 16
+  
+  
+        conwayLoop' : Conway m n -> SDLSurface -> IO ()
         processEvent : Conway m n -> SDLSurface -> Maybe Event -> IO (Maybe (Conway m n))
         
         
         conwayLoop' cw surface = do
-            displayConway cw surface
+            displayConway screenX screenY cw surface
             flipBuffers surface
             event <- pollEvent
             eventPResult <- processEvent cw surface event
@@ -72,7 +76,7 @@ conwayLoop cw =
         processEvent cw surface (Just (KeyDown KeyEnter)) 
                 = do
                     let nextCw = iterateGame cw
-                    displayConway nextCw surface
+                    displayConway screenX screenY nextCw surface
                     flipBuffers surface
                     return $ Just nextCw 
                    
