@@ -34,16 +34,17 @@ charToInt c = let i = cast {to=Int} c in
                 then Nothing
                 else Just (i - zero)
 
-total
-parse' : Int -> List Int -> Maybe Int
-parse' _   []      = Nothing
-parse' acc [d]     = Just (10 * acc + d)
-parse' acc (d::ds) = parse' (10 * acc + d) ds
 
-
-total parseInt : String -> Maybe Int
-parseInt str = (sequence (map charToInt (unpack str))) >>= parse' 0
-
+parseInt : String -> Maybe Int
+parseInt xs = parseInt' 1 (unpack xs)
+  where parseInt' : Int -> List Char -> Maybe Int
+        parseInt' p (s::sx) = case charToInt s of
+                      Just n => 
+                        do
+                          let v = n * p 
+                          nv <- parseInt' (p * 10) sx
+                          return $ v + nv
+                      Nothing => Nothing
 
 
 -- Obtain dimensions x * y of Conway board
