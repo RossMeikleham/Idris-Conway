@@ -13,8 +13,6 @@
 # Running
   `conway example.RLE`
 
-Press the Spacebar to iterate through states
-  
 Currently this implementation reads a file representing an initial Conway State in [Runtime Length Encoded Format](http://www.conwaylife.com/wiki/Run_Length_Encoded). Pressing a key with the SDL window focussed increments
 the state
 
