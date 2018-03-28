@@ -24,6 +24,7 @@ install:
     - git clone https://github.com/edwinb/SDL-idris
     - cd SDL-idris
     - idris --install sdl.ipkg
+    - cd ..
       
 script:
     - idris --build conway.ipkg
