@@ -4,8 +4,10 @@ module Conway.Conway
 import Data.Vect
 
 -- | An individual Cell can either be alive or dead
+public export
 data CellState = Alive | Dead
 
+public export
 data Conway : Nat -> Nat -> Type where 
    MkConway : (Vect m (Vect n CellState)) -> Conway m n
 
@@ -103,6 +105,7 @@ sequence n = reverse $ sequence' n
 -- | Generates a Vector of values 0 to N - 1
 --   Guarantees that returned Vector has N values
 --   and every values is < N
+export
 sequenceFin : (n : Nat) -> Vect n (Fin n)
 sequenceFin n = map n2f (sequence n)
   where n2f : Nat -> Fin n
@@ -110,6 +113,7 @@ sequenceFin n = map n2f (sequence n)
                   Just f => f
 
 -- | Get the next state from the current state
+export
 iterateGame : Conway m n -> Conway m n
 iterateGame {m} {n} (MkConway v) =  MkConway (map iterateRow (sequenceFin m))
   where iterateRow : Fin m -> Vect n CellState

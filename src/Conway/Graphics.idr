@@ -7,7 +7,7 @@ import Conway.Conway
 
 -- | Performs a sequence of IO actions
 sequenceIO : List (IO ()) -> IO ()
-sequenceIO Nil = return ()
+sequenceIO Nil = pure ()
 sequenceIO (x::xs) =
   do x
      sequenceIO xs
@@ -44,11 +44,14 @@ displayConway {m} {n} screenX screenY (MkConway v) s =
 
 -- | Given an initial Conway State, constantly updates 
 --   and displays the Conway State
+export
 conwayLoop : Conway m n -> IO ()
 conwayLoop cw {m} {n} = 
   do 
     surface <- startSDL screenX screenY
-    conwayLoop' cw surface
+    case surface of
+      Just surface' => conwayLoop' cw surface'
+      Nothing => print "Unable to get SDL surface\n"
 
   where 
         screenX : Int 
@@ -70,7 +73,7 @@ conwayLoop cw {m} {n} =
 
             case eventPResult of
               Just nextCw => conwayLoop' nextCw surface
-              Nothing     => return ()
+              Nothing     => pure ()
 
 
         processEvent cw surface (Just (KeyDown KeyEnter)) 
@@ -78,11 +81,11 @@ conwayLoop cw {m} {n} =
                     let nextCw = iterateGame cw
                     displayConway screenX screenY nextCw surface
                     flipBuffers surface
-                    return $ Just nextCw 
+                    pure $ Just nextCw 
                    
 
         processEvent _ _ (Just AppQuit) 
-                = return Nothing
+                = pure Nothing
 
         processEvent cw _ _ 
-                = return $ Just cw
+                = pure $ Just cw

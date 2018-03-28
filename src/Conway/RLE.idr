@@ -36,15 +36,18 @@ charToInt c = let i = cast {to=Int} c in
 
 
 parseInt : String -> Maybe Int
-parseInt xs = parseInt' 1 (unpack xs)
-  where parseInt' : Int -> List Char -> Maybe Int
-        parseInt' p (s::sx) = case charToInt s of
-                      Just n => 
-                        do
-                          let v = n * p 
-                          nv <- parseInt' (p * 10) sx
-                          return $ v + nv
-                      Nothing => Nothing
+parseInt s = parseInt' (unpack s)
+  where
+    parseInt' : List Char -> Maybe Int
+    parseInt' [] = Nothing
+    parseInt' s@(x::xs) = parseInt'' 0 s
+      where parseInt'' : Int -> List Char -> Maybe Int
+            parseInt'' i [] = Just i
+            parseInt'' i (x::xs) = case charToInt x of
+                          Just n => do
+                            let i' = (i * 10) + n
+                            parseInt'' i' xs
+                          Nothing => Nothing
 
 
 -- Obtain dimensions x * y of Conway board
@@ -58,7 +61,7 @@ getDimensions (x::xs) = getDim x
                         case (pack $ take 3 s2) of
                           ",y=" => do 
                               y <- parseInt (pack $ drop 3 s2)
-                              return (x, y)
+                              pure (x, y)
                           _ => Nothing
               _ => Nothing
   
@@ -84,7 +87,7 @@ getInitial y (x1::x2::xs) = getInitial' y (unpack x2)
                     [] => Just (1, xs)
                     digits => do 
                       n <- parseInt (pack digits)
-                      return (cast n, drop (length digits) xs)
+                      pure (cast n, drop (length digits) xs)
 
         repeatN : Nat -> a -> List a
         repeatN Z a = []
@@ -106,7 +109,7 @@ getInitial y (x1::x2::xs) = getInitial' y (unpack x2)
             first <- getLine xs
             nextItems <- next xs
             rest <- getInitial' (y - 1) nextItems 
-            return (first::rest)
+            pure (first::rest)
 
 
 getConway : List (String) -> Maybe (List (List CellState))
@@ -115,9 +118,13 @@ getConway lines = do
   getInitial (snd dimensions) lines
 
 
+export
 readCFile : String -> IO (Maybe (List (List CellState))) 
 readCFile fName = do
-  str <- readFile fName
-  let strLines = lines str
-  let noWSLines = compress $ removeWS $ removeComments $ strLines
-  return $ getConway noWSLines  
+  readFileRes <- readFile fName
+  case readFileRes of
+    Left err => pure Nothing
+    Right str => do
+      let strLines = lines str
+      let noWSLines = compress $ removeWS $ removeComments $ strLines
+      pure $ getConway noWSLines  
