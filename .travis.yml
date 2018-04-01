@@ -12,6 +12,7 @@ install:
     
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then travis_retry sudo add-apt-repository -y ppa:hvr/ghc; fi
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then travis_retry sudo apt-get update; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then travis_retry sudo apt-get install -y libsdl1.2-dev libsdl-gfx1.2-dev; fi
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER; fi
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export PATH=$HOME/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH; fi
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then travis_retry cabal update; fi
